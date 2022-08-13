@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [res, setRes] = useState(false);
@@ -30,6 +30,7 @@ const Login = () => {
       .then((res) => {
         setRes(res.data.token);
         localStorage.setItem("token", res.data.token); //untuk nyimpen di local storage, harus ditaro di dalem THEN
+        setIsLoggedIn(true);
         navigate("/dashboard");
       })
       .catch((err) => console.log(err));
