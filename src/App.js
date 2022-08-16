@@ -38,7 +38,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path={`/editpage`} element={<EditPage />} />
+      <Route path={`/editpage/:id`} element={<EditPage />} />
     </Routes>
   );
 }

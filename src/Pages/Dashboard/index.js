@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const style = {
     position: "absolute",
@@ -43,9 +45,19 @@ const Dashboard = () => {
       .catch((err) => console.log(err));
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    const token = localStorage.getItem("token"); //best practice nya gini, ini buat ngecek bener ga dia ke delete. kalo engga soalnya ga akan ke logout
+    if (token == null) {
+      setIsLoggedIn(false);
+      navigate("/login");
+    }
+  };
+
   return (
     <div>
       <h1>Ini Dashboard</h1>
+      <button onClick={logout}>Logout</button>
       <div>
         {data.map((item) => (
           <div>
@@ -53,7 +65,7 @@ const Dashboard = () => {
             <img src={item.avatar} />
             <div>
               <button onClick={handleOpen}>Delete</button>
-              <Link to="/editpage">
+              <Link to={`/editpage/${item.id}`}>
                 <button>Edit</button>
               </Link>
             </div>
@@ -68,7 +80,7 @@ const Dashboard = () => {
                   Warning
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Yakin ingin delete?
+                  {item.first_name}
                 </Typography>
                 <button onClick={() => handleDelete(item.id)}>Delete</button>
                 <button onClick={handleClose}>Batal</button>
