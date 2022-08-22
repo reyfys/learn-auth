@@ -7,39 +7,42 @@ import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import ProtectedRoute from "./HOC/ProtectedRoute";
 import EditPage from "./Pages/EditPage";
+import AuthContextProvider from "./Context/AuthContext";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  // const [isLoggedIn, setIsLoggedIn] = useState(null);
 
-  const checkIfLoggedIn = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setIsLoggedIn(false);
-    } else {
-      setIsLoggedIn(true);
-    }
-  };
+  // const checkIfLoggedIn = () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     setIsLoggedIn(false);
+  //   } else {
+  //     setIsLoggedIn(true);
+  //   }
+  // };
 
-  useEffect(() => {
-    checkIfLoggedIn();
-  });
+  // useEffect(() => {
+  //   checkIfLoggedIn();
+  // });
 
   return (
-    <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/register" />
-      <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute isLoggedIn={isLoggedIn}>
-            {/* bagian bawah ini Children nya */}
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route path={`/editpage/:id`} element={<EditPage />} />
-    </Routes>
+    <AuthContextProvider>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              {/* bagian bawah ini Children nya */}
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path={`/editpage/:id`} element={<EditPage />} />
+      </Routes>
+    </AuthContextProvider>
   );
 }
 

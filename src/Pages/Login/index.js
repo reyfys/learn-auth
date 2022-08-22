@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./register.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = () => {
+  const authContextData = useContext(AuthContext);
+  const { setIsLoggedIn } = authContextData;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [res, setRes] = useState(false);
@@ -24,7 +28,6 @@ const Login = ({ setIsLoggedIn }) => {
       email: email,
       password: password,
     };
-
     axios
       .post("https://reqres.in/api/login", payload)
       .then((res) => {
